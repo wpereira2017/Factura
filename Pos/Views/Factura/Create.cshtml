@@ -1,0 +1,200 @@
+﻿@model Pos.Models.FacturaViewModel
+@{
+    ViewBag.Title = "Facturar";
+}
+<h2 class="page-header">Nueva Factura</h2>
+<hr>
+
+@using (Html.BeginForm("Create", "Factura", FormMethod.Post, new { id = "frm-comprobante" }))
+{
+    <div class="container">
+        @*Cabecera*@
+        <div class="row col-12 mb-3">
+            <div class="col-7">
+                @Html.TextBoxFor(x => x.Cliente, new { @class = "form-control", placeholder = "Cliente" })
+            </div>
+            <div class="col-5">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">%</span>
+                    </div>
+                    @Html.TextBoxFor(x => x.CabeceraImpuesto, new { @class = "form-control", placeholder = "Impuesto", id = "Impuesto"})
+                    @*<input id="Impuesto" name="Impuesto" type="text" class="form-control" placeholder="Impuesto" />*@
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-12">
+            <div class="col-2">
+                @Html.TextBoxFor(x => x.CabeceraArticuloId, new { @class = "form-control", placeholder = "Buscar código", id = "Articulo" })
+                @Html.ValidationMessage("articulo_agregar", null, new { @class = "text-danger small" })
+            </div>
+            <div class="col-5">
+                @Html.TextBoxFor(x => x.CabeceraArticuloNombre, new { @class = "form-control" })
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    @Html.TextBoxFor(x => x.CabeceraArticuloPrecio, new { @class = "form-control", placeholder = "Precio" })
+                </div>
+            </div>
+            <div class="col-2">
+                @Html.TextBoxFor(x => x.CabeceraArticuloCantidad, new { @class = "form-control", placeholder = "Cantidad" })
+            </div>
+            <div class="col-1">
+                <button class="btn btn-primary" type="submit" value="agregar_articulo" name="action">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        @*Detalle*@
+        <div class="row col-12">
+            <table class="table table-striped mt-3" id="facturador-detalle">
+                <thead>
+                    @if (Model.FacturaDetalle.Count > 0)
+                    {
+                        <tr>
+                            <th></th>
+                            <th>Articulo</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Monto</th>
+                        </tr>
+                    }
+                </thead>
+                <tbody>
+                    @foreach (var d in Model.FacturaDetalle)
+                    {
+                        var i = Model.FacturaDetalle.IndexOf(d);
+                        <tr class="detalleFactura">
+                            <!-- Modelo -->
+                            @Html.Hidden("FacturaDetalle[" + i + "].ArticuloId", d.ArticuloId)
+                            @Html.Hidden("FacturaDetalle[" + i + "].ArticuloNombre", d.ArticuloNombre)
+                            @Html.Hidden("FacturaDetalle[" + i + "].PrecioUnitario", d.PrecioUnitario)
+                            @Html.Hidden("FacturaDetalle[" + i + "].Cantidad", d.Cantidad)
+                            @Html.Hidden("FacturaDetalle[" + i + "].Retirar", d.Retirar, new { @class = "retirar" })
+                            <td class="hide id">@d.ArticuloId</td>
+                            <td class="class=" col-2"">
+                                @*<span class="input-group-addon">
+                                        <button type="button" class="btn btn-danger btn-xs quitarProducto" value="@d.ArticuloId"><i class="fa fa-times"></i></button>
+                                    </span>*@
+
+                                <button class="btn btn-danger btn-xs btn-block btn-retirar" type="submit" value="retirar_articulo" name="action">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </td>
+                            <td class="col-4">@d.ArticuloNombre</td>
+                            <td class="col-2 text-right">@d.Cantidad</td>
+                            <td class="col-2 text-right">@string.Format("{0:N}", d.PrecioUnitario)</td>
+                            <td class="col-2 text-right">@string.Format("{0:N}", d.Monto())</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.FacturaDetalle.Count > 0)
+        {
+            <div class="row col-12">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <p class="lead">Totales de Factura</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th style="width:50%">Subtotal:</th>
+                                    <td>@string.Format("{0:N}", Model.SubTotal())</td>
+                                </tr>
+                                <tr>
+                                    <th>Impuesto (9.3%)</th>
+                                    <td>@string.Format("{0:N}", Model.MontoImpuesto())</td>
+                                </tr>
+                                <tr>
+                                    <th>Total:</th>
+                                    <td>@string.Format("{0:N}", Model.Total())</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <button class="btn btn-primary btn-block btn-lg" type="submit" value="generar" name="action">Generar factura</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+@section Scripts{
+
+    <script>
+
+        $(document).ready(function () {
+
+            LimpiarAgregarArticulo();
+
+            $(".btn-retirar").click(function () {
+                if (confirm('¿Está seguro de retirar el item seleccionado?')) {
+                    $(this).closest('.detalleFactura').find('.retirar').val("True");
+                    return true;
+                }
+                return false;
+            })
+
+            $(".quitarProducto").click(function () {
+
+                var url = "@Url.Action("RemoverArticulo","Factura")";
+                var articulo = $(this).attr("value");
+                var data = { codigo: articulo };
+
+                $.post(url, data).done(function (respuesta) {
+                    console.log(respuesta);
+                }).fail(manejarErrorAjax).always(function () {
+                    console.log('I fail');
+                })
+
+                function manejarErrorAjax(err) {
+                    console.log('Ha ocurrido un error');
+                }
+
+            })
+
+            $("#Articulo").change(function () {
+
+                var url = "@Url.Action("BuscarArticulo","Factura")";
+                var articulo = $("#Articulo").val();
+                var data = { codigo: articulo };
+
+                $.post(url, data).done(function (data) {
+                    console.log(data);
+                    $("#CabeceraArticuloNombre").val(data["Descripcion"]);
+                    $("#CabeceraArticuloPrecio").val(data["Precio"]);
+                    $("#CabeceraArticuloCantidad").focus();
+                }).fail(manejarErrorAjax).always(function () {
+
+                })
+
+                function manejarErrorAjax(err) {
+                    console.log('Ha ocurrido un error');
+                }
+
+            });
+
+        })
+
+        function LimpiarAgregarArticulo() {
+                $("#CabeceraArticuloId").val("");
+                $("#Articulo").val("");
+                $("#CabeceraArticuloNombre").val("");
+                //$("#CabeceraArticuloPrecio").val("");
+                $("#CabeceraArticuloCantidad").val(1);
+        }
+
+    </script>
+}
