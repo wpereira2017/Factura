@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Pos.Models.Factura>
+
+@{
+    ViewBag.Title = "Listado de Facturas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Facturas</h2>
+
+<div>
+    <p class="text-right">
+        @Html.ActionLink("Nueva Factura", "Create", null, new { @class = "btn btn-primary btn-large" })
+    </p>
+
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Cliente)</th>
+            <th class="text-right" style="width:140px">@Html.DisplayNameFor(model => model.Total)</th>
+            <th class="text-right" style="width:140px">@Html.DisplayNameFor(model => model.Creado)</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente)
+                </td>
+                <td class="text-right">@Html.DisplayFor(modelItem => item.Total)</td>
+                <td class="text-right">@item.Creado.ToString("dd-MM-yyyy")</td>
+            </tr>
+        }
+    </table>
+</div>

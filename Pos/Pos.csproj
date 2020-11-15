@@ -175,7 +175,11 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\american-express.png" />
     <Content Include="img\invoice.png" />
+    <Content Include="img\mastercard.png" />
+    <Content Include="img\paypal2.png" />
+    <Content Include="img\visa.png" />
     <Content Include="Models\ModelPos.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ModelPos.Context.cs</LastGenOutput>
@@ -331,6 +335,7 @@
     <Content Include="Views\Articulo\Details.cshtml" />
     <Content Include="Views\Articulo\Edit.cshtml" />
     <Content Include="Views\Articulo\Index.cshtml" />
+    <Content Include="Views\Factura\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

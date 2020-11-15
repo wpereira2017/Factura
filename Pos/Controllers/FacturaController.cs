@@ -106,6 +106,13 @@ namespace Pos.Controllers
             return true;
         }
 
+        public bool ActualizarFactura(int id)
+        {
+            FacturaViewModel model = new FacturaViewModel();
+            model.ActualizarFactura(id);
+            return true;
+        }
+
         public Articulo Buscar(string codigo)
         {
             using (var dbContext = new VentasEntities())

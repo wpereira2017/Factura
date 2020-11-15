@@ -27,12 +27,14 @@ namespace Pos.Models
     {
 
         #region Definición del ViewModel Factura
+
         //Cabecera
         public string Cliente { get; set; }
         public int CabeceraArticuloId { get; set; }
         public string CabeceraArticuloNombre { get; set; }
         public int CabeceraArticuloCantidad { get; set; }
         public decimal CabeceraArticuloPrecio { get; set; }
+
         public decimal CabeceraImpuesto { get; set; }
 
         //Cuerpo o detalle de la factura
@@ -58,6 +60,7 @@ namespace Pos.Models
         #endregion
 
         #region Validaciones en el registro de nueva factura
+
         public bool EsArticuloValido()
         {
             return !(CabeceraArticuloId == 0 || string.IsNullOrEmpty(CabeceraArticuloNombre) || CabeceraArticuloCantidad == 0 || CabeceraArticuloPrecio == 0);
@@ -65,9 +68,9 @@ namespace Pos.Models
 
         public bool ExisteEnDetalle(int ArticuloId)
         {
-            //revisar que el codigo debe ser string
             return FacturaDetalle.Any(x => x.ArticuloId == ArticuloId);
         }
+
         #endregion
 
         public FacturaViewModel()
@@ -95,6 +98,19 @@ namespace Pos.Models
                 Cantidad = CabeceraArticuloCantidad,
             });
 
+        }
+
+        public void ActualizarFactura(int id)
+        {
+            using (var dbContext = new VentasEntities())
+            {
+                var detalle = dbContext.FacturaDetalle.Where(x => x.id == id).FirstOrDefault();
+
+                detalle.ArticuloId = CabeceraArticuloId;
+                detalle.PrecioUnitario = CabeceraArticuloPrecio;
+                detalle.Cantidad = CabeceraArticuloCantidad;
+                dbContext.SaveChanges();
+            }
         }
 
         public Factura ToModel()

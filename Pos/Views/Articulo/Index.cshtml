@@ -1,25 +1,25 @@
 ﻿@model IEnumerable<Pos.Models.Articulo>
 
 @{
-    ViewBag.Title = "Listado";
+    ViewBag.Title = "Listado de Artículos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Artículos</h2>
 
-<div class="row d-flex">
-    <p class="ml-auto">
-        @Html.ActionLink("Crear Nuevo Artículo", "Create", null, new { @class = "btn btn-primary btn-large" })
+<div>
+    <p class="text-right">
+        @Html.ActionLink("Nuevo Artículo", "Create", null, new { @class = "btn btn-primary btn-large" })
     </p>
 
-    <table class="table table-hover">
+    <table class="table table-bordered table-hover">
         <tr>
             <th>Codigo</th>
             <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
-            <th>@Html.DisplayNameFor(model => model.Precio)</th>
-            <th>@Html.DisplayNameFor(model => model.Costo)</th>
-            <th>@Html.DisplayNameFor(model => model.Activo)</th>
-            <th>@Html.DisplayNameFor(model => model.Existencia)</th>
+            <th class="text-right">@Html.DisplayNameFor(model => model.Precio)</th>
+            <th class="text-right">@Html.DisplayNameFor(model => model.Costo)</th>
+            <th class="text-center">@Html.DisplayNameFor(model => model.Activo)</th>
+            <th class="text-right">@Html.DisplayNameFor(model => model.Existencia)</th>
             <th></th>
         </tr>
 
@@ -28,11 +28,11 @@
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Codigo, new { @class = "idArticulo" })</td>
                 <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                <td>@Html.DisplayFor(modelItem => item.Precio)</td>
-                <td>@Html.DisplayFor(modelItem => item.Costo)</td>
-                <td>@Html.DisplayFor(modelItem => item.Activo)</td>
-                <td>@Html.DisplayFor(modelItem => item.Existencia)</td>
-                <td>
+                <td class="text-right">@Html.DisplayFor(modelItem => item.Precio)</td>
+                <td class="text-right">@Html.DisplayFor(modelItem => item.Costo)</td>
+                <td class="text-center">@Html.DisplayFor(modelItem => item.Activo)</td>
+                <td class="text-right">@Html.DisplayFor(modelItem => item.Existencia)</td>
+                <td class="text-right">
                     @Html.ActionLink("Editar", "Edit", new { id = item.id }, new { @class = "btn btn-light btn-large" })
                     @Html.ActionLink("Detalle", "Details", new { id = item.id }, new { @class = "btn btn-light btn-large" })
                     @Html.ActionLink("Eliminar", "Delete", new { id = item.id }, new { @class = "btn btn-danger btn-large btn-elimina" })
