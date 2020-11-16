@@ -98,7 +98,7 @@ namespace FacturaWebLG.Controllers
             {
                 using (var db = new VentasEntities())
                 {
-                    Articulo art = db.Articulo.Find(item.Codigo);
+                    Articulo art = db.Articulo.Find(item.id);
                     art.Descripcion = item.Descripcion;
                     art.Precio = item.Precio;
                     art.Costo = item.Costo;

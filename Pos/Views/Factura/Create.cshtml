@@ -141,7 +141,7 @@
                                 <td class="montoImpuesto">@string.Format("{0:N}", Model.MontoImpuesto())</td>
                             </tr>
                             <tr>
-                                <th>Total:</th>montoTotal
+                                <th>Total:</th>
                                 <td class="">@string.Format("{0:N}", Model.Total())</td>
                             </tr>
                         </table>
@@ -198,8 +198,8 @@
                 var montoImpuesto = subTotal * (nuevoImpuesto/100);
                 var montoTotal = subTotal + montoImpuesto;
 
-                $("#montoImpuesto").val(montoImpuesto);
-                $("#montoTotal").val(montoTotal);
+                //$("#montoImpuesto").val(montoImpuesto);
+                //$("#montoTotal").val(montoTotal);
             });
 
         })
