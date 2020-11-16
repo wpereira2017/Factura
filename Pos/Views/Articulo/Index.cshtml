@@ -6,41 +6,45 @@
 }
 
 <h2>Artículos</h2>
+<p class="text-right">
+    @Html.ActionLink("Nuevo Artículo", "Create", null, new { @class = "btn btn-primary btn-large" })
+</p>
 
-<div>
-    <p class="text-right">
-        @Html.ActionLink("Nuevo Artículo", "Create", null, new { @class = "btn btn-primary btn-large" })
-    </p>
+<div class="row">
 
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>Codigo</th>
-            <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
-            <th class="text-right">@Html.DisplayNameFor(model => model.Precio)</th>
-            <th class="text-right">@Html.DisplayNameFor(model => model.Costo)</th>
-            <th class="text-center">@Html.DisplayNameFor(model => model.Activo)</th>
-            <th class="text-right">@Html.DisplayNameFor(model => model.Existencia)</th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Codigo, new { @class = "idArticulo" })</td>
-                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                <td class="text-right">@Html.DisplayFor(modelItem => item.Precio)</td>
-                <td class="text-right">@Html.DisplayFor(modelItem => item.Costo)</td>
-                <td class="text-center">@Html.DisplayFor(modelItem => item.Activo)</td>
-                <td class="text-right">@Html.DisplayFor(modelItem => item.Existencia)</td>
-                <td class="text-right">
-                    @Html.ActionLink("Editar", "Edit", new { id = item.id }, new { @class = "btn btn-light btn-large" })
-                    @Html.ActionLink("Detalle", "Details", new { id = item.id }, new { @class = "btn btn-light btn-large" })
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.id }, new { @class = "btn btn-danger btn-large btn-elimina" })
-                </td>
+                <th>Codigo</th>
+                <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+                <th class="text-right">@Html.DisplayNameFor(model => model.Precio)</th>
+                <th class="text-right">@Html.DisplayNameFor(model => model.Costo)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Activo)</th>
+                <th class="text-right">@Html.DisplayNameFor(model => model.Existencia)</th>
+                <th></th>
             </tr>
-        }
 
-    </table>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Codigo, new { @class = "idArticulo" })</td>
+                    <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                    <td class="text-right">@Html.DisplayFor(modelItem => item.Precio)</td>
+                    <td class="text-right">@Html.DisplayFor(modelItem => item.Costo)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Activo)</td>
+                    <td class="text-right">@Html.DisplayFor(modelItem => item.Existencia)</td>
+                    <td class="text-right">
+                        @Html.ActionLink(" ", "Edit", new { id = item.id }, new { @class = "btn btn-primary btn-large fa fa-edit", title = "Editar" })
+                        @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-primary btn-large fa fa-list", title = "Detalles" })
+                        @Html.ActionLink(" ", "Delete", new { id = item.id }, new { @class = "btn btn-danger btn-large btn-elimina fa fa-trash", title = "Eliminar" })
+                        @*<a href="@Url.Action(...)"><i class="icon-pencil icon-white"></i> </a>*@
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
 </div>
 
 @section scripts{

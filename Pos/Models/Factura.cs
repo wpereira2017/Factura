@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Data.Entity;
 
 namespace Pos.Models
 {
@@ -78,7 +79,7 @@ namespace Pos.Models
             FacturaDetalle = new List<FacturaDetalleViewModel>();
         }
 
-        public void RemoverDeDetalle()
+        public void RemoverArticuloDetalle()
         {
             if (FacturaDetalle.Count > 0)
             {
@@ -88,7 +89,7 @@ namespace Pos.Models
             }
         }
 
-        public void AgregarADetalle()
+        public void AgregarArticuloDetalle()
         {
             FacturaDetalle.Add(new FacturaDetalleViewModel
             {
@@ -96,33 +97,21 @@ namespace Pos.Models
                 ArticuloNombre = CabeceraArticuloNombre,
                 PrecioUnitario = CabeceraArticuloPrecio,
                 Cantidad = CabeceraArticuloCantidad,
+                Impuesto = CabeceraImpuesto,
             });
 
         }
 
-        public void ActualizarFactura(int id)
-        {
-            using (var dbContext = new VentasEntities())
-            {
-                var detalle = dbContext.FacturaDetalle.Where(x => x.id == id).FirstOrDefault();
-
-                detalle.ArticuloId = CabeceraArticuloId;
-                detalle.PrecioUnitario = CabeceraArticuloPrecio;
-                detalle.Cantidad = CabeceraArticuloCantidad;
-                dbContext.SaveChanges();
-            }
-        }
-
         public Factura ToModel()
         {
-            var comprobante = new Factura();
-            comprobante.Cliente = this.Cliente;
-            comprobante.Creado = DateTime.Now;
-            comprobante.Total = this.Total();
+            var factura = new Factura();
+            factura.Cliente = this.Cliente;
+            factura.Creado = DateTime.Now;
+            factura.Total = this.Total();
 
             foreach (var d in FacturaDetalle)
             {
-                comprobante.FacturaDetalle.Add(new FacturaDetalle
+                factura.FacturaDetalle.Add(new FacturaDetalle
                 {
                     ArticuloId = d.ArticuloId,
                     Monto = d.Monto(),
@@ -131,7 +120,7 @@ namespace Pos.Models
                 });
             }
 
-            return comprobante;
+            return factura;
         }
     }
     #endregion

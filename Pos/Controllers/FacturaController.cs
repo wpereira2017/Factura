@@ -63,12 +63,12 @@ namespace Pos.Controllers
                 }
                 else
                 {
-                    model.AgregarADetalle();
+                    model.AgregarArticuloDetalle();
                 }
             }
             else if (action == "retirar_articulo")
             {
-                model.RemoverDeDetalle();
+                model.RemoverArticuloDetalle();
             }
             else
             {
@@ -103,13 +103,6 @@ namespace Pos.Controllers
                 return false;
             }
 
-            return true;
-        }
-
-        public bool ActualizarFactura(int id)
-        {
-            FacturaViewModel model = new FacturaViewModel();
-            model.ActualizarFactura(id);
             return true;
         }
 

@@ -1,91 +1,102 @@
 ﻿@model Pos.Models.FacturaViewModel
 @{
     ViewBag.Title = "Facturar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2 class="page-header">Nueva Factura</h2>
 <hr>
 
 @using (Html.BeginForm("Create", "Factura", FormMethod.Post, new { id = "frm-factura" }))
 {
-<div class="container">
-    @*Cabecera*@
-    <div class="card card-body bg-light mb-3">
-        <div class="form-row">
-            <div class="col-6 col-lg-9">
-                @Html.TextBoxFor(x => x.Cliente, new { @class = "form-control", placeholder = "Cliente" })
+
+<div class="d-flex flex-row-reverse mb-3">
+    <div class="p-2 col-sm-2">@Html.TextBoxFor(x => x.Creado, new { @class = "form-control", @readonly = "readonly", @Value = @DateTime.Now.ToShortDateString() })</div>
+    <div class="p-2 col-sm-1 col-form-label">Fecha</div>
+</div>
+
+    <div class="container">
+        @*Cabecera*@
+
+        <div class="card card-body bg-light mb-3">
+            <div class="form-row">
+                <div class="col-6 col-lg-8">
+                    @Html.TextBoxFor(x => x.Cliente, new { @class = "form-control", placeholder = "Cliente" })
+                </div>
+                <div class="col-6 col-lg-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Impuesto</span>
+                        </div>
+                        @Html.TextBoxFor(x => x.CabeceraImpuesto, new { @class = "form-control", @min = "0", @type = "number", placeholder = "Impuesto", id = "Impuesto" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 col-lg-3">
+        </div>
+
+        <div class="row col-12">
+            <div class="col-6 col-lg-2 productoFactura">
+                @Html.TextBoxFor(x => x.CabeceraArticuloId, new { @class = "form-control", placeholder = "Buscar código", id = "Articulo" })
+                @Html.ValidationMessage("articulo_agregar", null, new { @class = "text-danger small" })
+            </div>
+            <div class="col-6 col-lg-4 productoFactura">
+                @Html.TextBoxFor(x => x.CabeceraArticuloNombre, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="col-6 col-lg-3 mt-2 mt-lg-0 productoFactura">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">Impuesto</span>
+                        <span class="input-group-text">Precio</span>
                     </div>
-                    @Html.TextBoxFor(x => x.CabeceraImpuesto, new { @class = "form-control", placeholder = "Impuesto", id = "Impuesto" })
+                    @Html.TextBoxFor(x => x.CabeceraArticuloPrecio, new { @class = "form-control", @readonly = "readonly" })
                     <div class="input-group-append">
-                        <span class="input-group-text">%</span>
+                        <span class="input-group-text">$</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row col-12">
-        <div class="col-6 col-lg-2 ">
-            @Html.TextBoxFor(x => x.CabeceraArticuloId, new { @class = "form-control", placeholder = "Buscar código", id = "Articulo" })
-            @Html.ValidationMessage("articulo_agregar", null, new { @class = "text-danger small" })
-        </div>
-        <div class="col-6 col-lg-4">
-            @Html.TextBoxFor(x => x.CabeceraArticuloNombre, new { @class = "form-control" })
-        </div>
-        <div class="col-6 col-lg-3 mt-2 mt-lg-0">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Precio</span>
-                </div>
-                @Html.TextBoxFor(x => x.CabeceraArticuloPrecio, new { @class = "form-control" })
-                <div class="input-group-append">
-                    <span class="input-group-text">$</span>
+            <div class="col-6 col-lg-2 mt-2 mt-lg-0 productoFactura">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Cantidad</span>
+                    </div>
+                    @Html.TextBoxFor(x => x.CabeceraArticuloCantidad, new { @class = "form-control", @min = "0", @type = "number", placeholder = "Cantidad" })
                 </div>
             </div>
-        </div>
-        <div class="col-6 col-lg-2 mt-2 mt-lg-0">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Cantidad</span>
-                </div>
-                @Html.TextBoxFor(x => x.CabeceraArticuloCantidad, new { @class = "form-control", placeholder = "Cantidad" })
+            <div class="col-6 col-lg-1 mt-2 mt-lg-0 productoFactura">
+                <button class="btn btn-primary" type="submit" value="agregar_articulo" name="action">
+                    <i class="fa fa-plus"></i>
+                </button>
             </div>
         </div>
-        <div class="col-6 col-lg-1 mt-2 mt-lg-0">
-            <button class="btn btn-primary" type="submit" value="agregar_articulo" name="action">
-                <i class="fa fa-plus"></i>
-            </button>
-        </div>
-    </div>
 
-    @*Detalle*@
-    <div class="row col-12">
-        <table class="table table-striped mt-3" id="facturador-detalle">
-            <thead>
-                @if (Model.FacturaDetalle.Count > 0)
-                {
+        @*Detalle*@
+        <div class="row col-12">
+            <table class="table table-striped mt-3" id="facturador-detalle">
+                <thead>
+                    @if (Model.FacturaDetalle.Count > 0)
+                    {
                     <tr>
                         <th></th>
-                        <th>Articulo</th>
-                        <th>Cantidad</th>
+                        <th>Descripción</th>
                         <th class="text-right">Precio Unitario</th>
-                        <th class="text-right">Monto</th>
+                        <th class="text-right">Cantidad</th>
+                        <th class="text-right">SubTotal</th>
+                        <th class="text-right">Impuesto</th>
+                        <th class="text-right">Total</th>
                     </tr>
-                }
-            </thead>
-            <tbody>
-                @foreach (var d in Model.FacturaDetalle)
-                {
-                    var i = Model.FacturaDetalle.IndexOf(d);
+                    }
+                </thead>
+                <tbody>
+                    @foreach (var d in Model.FacturaDetalle)
+                    {
+                        var i = Model.FacturaDetalle.IndexOf(d);
                     <tr class="detalleFactura">
                         <!-- Modelo -->
                         @Html.Hidden("FacturaDetalle[" + i + "].ArticuloId", d.ArticuloId)
                         @Html.Hidden("FacturaDetalle[" + i + "].ArticuloNombre", d.ArticuloNombre)
                         @Html.Hidden("FacturaDetalle[" + i + "].PrecioUnitario", d.PrecioUnitario)
+                        @Html.Hidden("FacturaDetalle[" + i + "].Impuesto", d.Impuesto)
                         @Html.Hidden("FacturaDetalle[" + i + "].Cantidad", d.Cantidad)
                         @Html.Hidden("FacturaDetalle[" + i + "].Retirar", d.Retirar, new { @class = "retirar" })
                         <td class="class=" col-2"">
@@ -94,50 +105,52 @@
                             </button>
                         </td>
                         <td class="col-4">@d.ArticuloNombre</td>
-                        <td class="col-2 text-right">@d.Cantidad</td>
                         <td class="col-2 text-right">@string.Format("{0:N}", d.PrecioUnitario)</td>
+                        <td class="col-2 text-right">@d.Cantidad</td>
                         <td class="col-2 text-right">@string.Format("{0:N}", d.Monto())</td>
+                        <td class="col-2 text-right">@string.Format("{0:N}", d.ImpuestoPorDetalle())</td>
+                        <td class="col-2 text-right">@string.Format("{0:N}", d.TotalPorDetalle())</td>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    @*Totales*@
-    @if (Model.FacturaDetalle.Count > 0)
-    {
-        <div class="row">
-            <div class="col-6">
-                <p class="lead">Métodos de pago:</p>
-                <img src="~/img/visa.png" alt="Visa">
-                <img src="~/img/mastercard.png" alt="Mastercard">
-                <img src="~/img/american-express.png" alt="American Express">
-                <img src="~/img/paypal2.png" alt="Paypal">
-                <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;"></p>
-            </div>
-            <div class="col-6">
-                <p class="lead">Totales de Factura</p>
-                <div class="table-responsive">
-                    <table class="table">
-                        <tr>
-                            <th style="width:50%">Subtotal:</th>
-                            <td>@string.Format("{0:N}", Model.SubTotal())</td>
-                        </tr>
-                        <tr>
-                            <th>Impuesto (@Model.CabeceraImpuesto%):</th>
-                            <td>@string.Format("{0:N}", Model.MontoImpuesto())</td>
-                        </tr>
-                        <tr>
-                            <th>Total:</th>
-                            <td>@string.Format("{0:N}", Model.Total())</td>
-                        </tr>
-                    </table>
-                </div>
-                <button class="btn btn-primary btn-block btn-lg" type="submit" value="generar" name="action">Generar factura</button>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
-    }
-</div>
+
+        @*Totales*@
+        @if (Model.FacturaDetalle.Count > 0)
+        {
+            <div class="row">
+                <div class="col-6">
+                    <p class="lead">Métodos de pago:</p>
+                    <img src="~/img/visa.png" alt="Visa">
+                    <img src="~/img/mastercard.png" alt="Mastercard">
+                    <img src="~/img/american-express.png" alt="American Express">
+                    <img src="~/img/paypal2.png" alt="Paypal">
+                    <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;"></p>
+                </div>
+                <div class="col-6">
+                    <p class="lead">Totales de Factura</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <th style="width:50%">Subtotal:</th>
+                                <td class="montoSubTotal">@string.Format("{0:N}", Model.SubTotal())</td>
+                            </tr>
+                            <tr>
+                                <th>Impuesto (@Model.CabeceraImpuesto%):</th>
+                                <td class="montoImpuesto">@string.Format("{0:N}", Model.MontoImpuesto())</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>montoTotal
+                                <td class="">@string.Format("{0:N}", Model.Total())</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button class="btn btn-primary btn-block btn-lg" type="submit" value="generar" name="action">Generar factura</button>
+                </div>
+            </div>
+        }
+    </div>
 }
 @section Scripts{
 
@@ -175,27 +188,18 @@
 
             });
 
-            $('#Impuesto').on('input', function () {
-                this.value = this.value.replace(/[^0-9,.]/g, '').replace(/,/g, '.');
-            });
-
+            //$('#Impuesto').on('input', function () {
+            //    this.value = this.value.replace(/[^0-9,.]/g, '').replace(/,/g, '.');
+            //});
+            
             $("#Impuesto").change(function () {
+                var nuevoImpuesto = $(this).val();
+                var subTotal = document.getElementById("montoSubTotal");
+                var montoImpuesto = subTotal * (nuevoImpuesto/100);
+                var montoTotal = subTotal + montoImpuesto;
 
-                var url = "@Url.Action("ActualizarFactura", "Factura")";
-                var articulo = $("#Articulo").val();
-                var data = { codigo: articulo };
-                console.log('hola');
-
-                $.post(url, data).done(function (data) {
-                    console.log(data);
-                }).fail(manejarErrorAjax).always(function () {
-
-                })
-
-                function manejarErrorAjax(err) {
-                    console.log('Ha ocurrido un error');
-                }
-
+                $("#montoImpuesto").val(montoImpuesto);
+                $("#montoTotal").val(montoTotal);
             });
 
         })
