@@ -40,14 +40,21 @@ namespace FacturaWebLG.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-
             try
             {
-                using(var db = new VentasEntities())
+                using (var db = new VentasEntities())
                 {
-                    db.Articulo.Add(item);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    if (IsDuplicate(item.Codigo, item.id))
+                    {
+                        ModelState.AddModelError("", "Verifique, ya existe otro artículo con código: " + item.Codigo);
+                        return View();
+                    }
+                    else
+                    {
+                        db.Articulo.Add(item);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
             }
             catch(Exception ex)
@@ -98,19 +105,30 @@ namespace FacturaWebLG.Controllers
             {
                 using (var db = new VentasEntities())
                 {
-                    Articulo art = db.Articulo.Find(item.id);
-                    art.Descripcion = item.Descripcion;
-                    art.Precio = item.Precio;
-                    art.Costo = item.Costo;
-                    art.Existencia = item.Existencia;
+                    if (IsDuplicate(item.Codigo, item.id))
+                    {
+                        ModelState.AddModelError("", "Verifique, ya existe otro artículo con código: " + item.Codigo);
+                        return View();
+                    }
+                    else
+                    {
+                        Articulo art = db.Articulo.Find(item.id);
+                        art.Codigo = item.Codigo;
+                        art.Descripcion = item.Descripcion;
+                        art.Precio = item.Precio;
+                        art.Costo = item.Costo;
+                        art.Existencia = item.Existencia;
 
-                    db.Entry(art).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                        db.Entry(art).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+
+                    }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                ModelState.AddModelError("", "Error al actualizar artículo: " + ex.Message);
                 return View();
             }
         }
@@ -146,6 +164,23 @@ namespace FacturaWebLG.Controllers
             {
                 return View();
             }
+        }
+
+        public bool IsDuplicate(string codigo, int id)
+        {
+            using (var db = new VentasEntities())
+            {
+                if (db.Articulo.Any(x => x.Codigo == codigo && x.id != id))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+
         }
     }
 }

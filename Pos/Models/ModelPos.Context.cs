@@ -22,9 +22,26 @@ namespace Pos.Models
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            throw new UnintentionalCodeFirstException();
+            modelBuilder.Entity<Factura>()
+                .Property(e => e.Cliente)
+                .IsUnicode(false);
+
+            //modelBuilder.Entity<Factura>()
+            //    .HasMany(e => e.FacturaDetalle)
+            //    .WithRequired(e => e.Factura)
+            //    .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Articulo>()
+                .Property(e => e.Descripcion)
+                .IsUnicode(false);
+
+            //modelBuilder.Entity<Articulo>()
+            //    .HasMany(e => e.FacturaDetalle)
+            //    .WithRequired(e => e.Articulo)
+            //    .WillCascadeOnDelete(false);
+
         }
-    
+
         public virtual DbSet<Articulo> Articulo { get; set; }
         public virtual DbSet<Factura> Factura { get; set; }
         public virtual DbSet<FacturaDetalle> FacturaDetalle { get; set; }
