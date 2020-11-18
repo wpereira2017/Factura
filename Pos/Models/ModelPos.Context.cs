@@ -26,19 +26,19 @@ namespace Pos.Models
                 .Property(e => e.Cliente)
                 .IsUnicode(false);
 
-            //modelBuilder.Entity<Factura>()
-            //    .HasMany(e => e.FacturaDetalle)
-            //    .WithRequired(e => e.Factura)
-            //    .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Factura>()
+                .HasMany(e => e.FacturaDetalle)
+                .WithRequired(e => e.Factura)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Articulo>()
                 .Property(e => e.Descripcion)
                 .IsUnicode(false);
 
-            //modelBuilder.Entity<Articulo>()
-            //    .HasMany(e => e.FacturaDetalle)
-            //    .WithRequired(e => e.Articulo)
-            //    .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Articulo>()
+                .HasMany(e => e.FacturaDetalle)
+                .WithRequired(e => e.Articulo)
+                .WillCascadeOnDelete(false);
 
         }
 

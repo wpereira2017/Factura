@@ -17,7 +17,7 @@ namespace Pos.Controllers
             {
                 using (var dbContext = new VentasEntities())
                 {
-                    List<Factura> lista = dbContext.Factura.ToList();
+                    List<Factura> lista = dbContext.Factura.OrderByDescending(x => x.Creado).ToList();
                     return View(lista);
                 }
             }

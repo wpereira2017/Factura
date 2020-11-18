@@ -25,13 +25,13 @@ namespace Pos.Models
         public string Descripcion { get; set; }
 
         [Required]
-        [Range(1, (double)decimal.MaxValue, ErrorMessage = "Valor debe estar entre{1} y {2}.")]
-        [RegularExpression(@"^\d+.?\d{0,2}$", ErrorMessage = "Precio de venta inválido; máximo 2 puntos decimales")]
+        [Range(0.0, (double)decimal.MaxValue, ErrorMessage = "Valor debe estar entre {1} y {2}.")]
+        [RegularExpression(@"^\d+.?\d{0,3}$", ErrorMessage = "Precio de venta inválido, 3 decimales permitidos")]
         public decimal Precio { get; set; }
 
         [Required]
-        [Range(1, (double)decimal.MaxValue, ErrorMessage = "Valor debe estar entre{1} y {2}.")]
-        [RegularExpression(@"^\d+.?\d{0,2}$", ErrorMessage = "Costo de artículo inválido; máximo 2 puntos decimales")]
+        [Range(0.0, (double)decimal.MaxValue, ErrorMessage = "Valor debe estar entre {1} y {2}.")]
+        [RegularExpression(@"^\d+.?\d{0,3}$", ErrorMessage = "Costo de artículo inválido, 3 decimales permitidos")]
         public decimal Costo { get; set; }
 
         [Required]
